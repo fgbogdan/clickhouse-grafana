@@ -60,6 +60,9 @@ export default class Scanner {
         // if addnotation
         if (this._s.startsWith("<%")) {
           let nPos = this._s.search("%>");
+          if(nPos === -1){
+            throw "unmatched <%/%> [" + this._s + "]";  
+          }
           this._s = this._s.substring(nPos + 2);
         } else {
           let r = this.re.exec(this._s);
@@ -253,7 +256,7 @@ let wsRe = "\\s+",
     intRe = "\\d+",
     powerIntRe = "\\d+e\\d+",
     floatRe = "\\d+\\.\\d*|\\d*\\.\\d+|\\d+[eE][-+]\\d+",
-    stringRe = "('[^']*')|(`[^`]*`)|(\"[^\"]*\")",
+    stringRe = "('(?:[^'\\\\]|\\\\.)*')|(`(?:[^`\\\\]|\\\\.)*`)|(\"(?:[^\"\\\\]|\\\\.)*\")",
     binaryOpRe = "=>|\\|\\||>=|<=|==|!=|<>|->|[-+/%*=<>\\.!]",
     statementRe = "\\b(select|from|where|having|order by|group by|limit|format|prewhere|union all)\\b",
     joinsRe = "(any inner join|any left join|all inner join|all left join" +
